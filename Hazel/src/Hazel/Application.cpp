@@ -6,7 +6,7 @@
 #include "Hazel/Log.h"
 
 #include "glad/glad.h"
-
+#include "Input.h"
 namespace Hazel {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -45,7 +45,7 @@ namespace Hazel {
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowsCloseEvent>(BIND_EVENT_FN(OnWindowClose));
-		HZ_CORE_TRACE("{0}", e.ToString());
+	//	HZ_CORE_TRACE("{0}", e.ToString());
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
 			(*--it)->OnEvent(e);
@@ -58,16 +58,17 @@ namespace Hazel {
 	{
 		while (m_Running)
 		{
-			glClearColor(1, 0, 1, 1);
+			glClearColor(1, 0, 0, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
+
 			m_Window->OnUpdate();
 		}
 	}
 
-	bool Application::OnWindowClose(WindowsCloseEvent& e)
+	bool Application::OnWindowClose(WindowsCloseEvent& event)
 	{
 		m_Running = false;
 		return true;

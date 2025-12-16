@@ -81,7 +81,7 @@ namespace Hazel {
 				}
 				case GLFW_RELEASE:
 				{
-					KeyReleaseEvent event(key);
+					KeyReleasedEvent event(key);
 					data.EventCallback(event);
 					break;
 				}
@@ -126,12 +126,20 @@ namespace Hazel {
 		});
 
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-				MouseMovedEvent event((float)xPos, (float)yPos);
-				data.EventCallback(event);
-			});
+			MouseMovedEvent event((float)xPos, (float)yPos);
+			data.EventCallback(event);
+		});
+
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			KeyTypedEvent event(keycode);
+			data.EventCallback(event);
+		});
 	}
 
 	void WindowsWindow::Shutdown()
